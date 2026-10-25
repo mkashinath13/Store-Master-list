@@ -96,23 +96,30 @@
                 
                 <div class="form-group">
                     <label for="kindOfMaterial">Kind of Material</label>
-                    <select id="kindOfMaterial" required>
-                        <option value="">Select Material</option>
-                        <option value="Electrical">Electrical</option>
-                        <option value="Plumbing">Plumbing</option>
-                        <option value="HVAC">HVAC</option>
-                        <option value="Civil">Civil</option>
-                    </select>
+                    <input type="text" id="kindOfMaterial" list="materialList" placeholder="Select or type material" required>
+                    <datalist id="materialList">
+                        <option value="Building Meterials">
+                        <option value="Concrete Products">
+                        <option value="Equipments">
+                        <option value="PPE Kit">
+                        <option value="Safety Items">
+                    </datalist>
                 </div>
 
                 <div class="form-group">
                     <label for="makeOrSupplier">Make or Supplier</label>
-                    <select id="makeOrSupplier" required>
-                        <option value="">Select Supplier</option>
-                        <option value="Supplier A">Supplier A</option>
-                        <option value="Supplier B">Supplier B</option>
-                        <option value="Supplier C">Supplier C</option>
-                    </select>
+                    <input type="text" id="makeOrSupplier" list="supplierList" placeholder="Select or type supplier" required>
+                    <datalist id="supplierList">
+                        <option value="Al Ghurair">
+                        <option value="Al Jalal TR Est LLC">
+                        <option value="Al Madina Building Materials trading">
+                        <option value="DSI OLD Stock">
+                        <option value="Dar Al Fonoon LLC">
+                        <option value="FAST Concrete Products Factory">
+                        <option value="Light Star Trading co">
+                        <option value="RAK Middle East Traders">
+                        <option value="Sun World Building Meterials">
+                    </datalist>
                 </div>
 
                 <div class="form-group full-width">
@@ -127,13 +134,19 @@
 
                 <div class="form-group">
                     <label for="unit">Unit</label>
-                    <select id="unit" required>
-                        <option value="">Select Unit</option>
-                        <option value="Pcs">Pcs</option>
-                        <option value="Nos">Nos</option>
-                        <option value="Mtrs">Mtrs</option>
-                        <option value="Boxes">Boxes</option>
-                    </select>
+                    <input type="text" id="unit" list="unitList" placeholder="Select or type unit" required>
+                    <datalist id="unitList">
+                        <option value="Pcs">
+                        <option value="Pair">
+                        <option value="Ctn">
+                        <option value="Roll">
+                        <option value="Pkt">
+                        <option value="Set">
+                        <option value="M3">
+                        <option value="Ton">
+                        <option value="Dozen (60)">
+                        <option value="20x5">
+                    </datalist>
                 </div>
 
                 <div class="form-group">
@@ -162,13 +175,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="floor">Floor</label>
-                    <select id="floor">
-                        <option value="">Select Floor</option>
-                        <option value="Ground Floor">Ground Floor</option>
-                        <option value="1st Floor">1st Floor</option>
-                        <option value="2nd Floor">2nd Floor</option>
-                    </select>
+                    <label for="floor">Floor / Location</label>
+                    <input type="text" id="floor" list="floorList" placeholder="Select or type location">
+                    <datalist id="floorList">
+                        <option value="Container">
+                        <option value="Out Side">
+                        <option value="Ground Floor">
+                        <option value="1st Floor">
+                        <option value="2nd Floor">
+                    </datalist>
                 </div>
 
                 <div class="form-group">
