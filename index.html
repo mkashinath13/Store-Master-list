@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Master List Entry</title>
+    <title>Store Master List Management</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,19 +15,54 @@
             background-color: #f4f7f6;
             color: #333;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 650px;
+        }
+        .nav-tab {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .nav-tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Container & Tabs */
         .container {
             background: #ffffff;
-            padding: 40px;
+            padding: 30px 40px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             width: 100%;
             max-width: 650px;
         }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
         h2 {
             text-align: center;
             margin-bottom: 25px;
@@ -85,140 +120,333 @@
             font-size: 14px;
             font-weight: 600;
         }
+
+        /* Search Tab Styles */
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+        }
+        .results-table-wrapper {
+            overflow-x: auto;
+            max-height: 400px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #f1f8ff;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Navigation Menu -->
+    <div class="navbar">
+        <div class="nav-tab active" onclick="switchTab('addTab')">Add Entry</div>
+        <div class="nav-tab" onclick="switchTab('searchTab')">Search Materials</div>
+    </div>
+
     <div class="container">
-        <h2>Material Entry Form</h2>
-        <form id="materialForm" novalidate>
-            <div class="form-grid">
-                
-                <div class="form-group">
-                    <label for="kindOfMaterial">Kind of Material</label>
-                    <input type="text" id="kindOfMaterial" list="materialList" placeholder="Select or type material" >
-                    <datalist id="materialList">
-                        <option value="Building Meterials">
-                        <option value="Concrete Products">
-                        <option value="Equipments">
-                        <option value="PPE Kit">
-                        <option value="Safety Items">
-                    </datalist>
-                </div>
+        
+        <!-- TAB 1: ADD ENTRY FORM -->
+        <div id="addTab" class="tab-content active">
+            <h2>Material Entry Form</h2>
+            <form id="materialForm" novalidate>
+                <div class="form-grid">
+                    
+                    <div class="form-group">
+                        <label for="kindOfMaterial">Kind of Material</label>
+                        <input type="text" id="kindOfMaterial" list="materialList" placeholder="Select or type material">
+                        <datalist id="materialList">
+                            <option value="Building Meterials">
+                            <option value="Concrete Products">
+                            <option value="Equipments">
+                            <option value="PPE Kit">
+                            <option value="Safety Items">
+                        </datalist>
+                    </div>
 
-                <div class="form-group">
-                    <label for="makeOrSupplier">Make or Supplier</label>
-                    <input type="text" id="makeOrSupplier" list="supplierList" placeholder="Select or type supplier" >
-                    <datalist id="supplierList">
-                        <option value="Al Ghurair">
-                        <option value="Al Jalal TR Est LLC">
-                        <option value="Al Madina Building Materials trading">
-                        <option value="DSI OLD Stock">
-                        <option value="Dar Al Fonoon LLC">
-                        <option value="FAST Concrete Products Factory">
-                        <option value="Light Star Trading co">
-                        <option value="RAK Middle East Traders">
-                        <option value="Sun World Building Meterials">
-                    </datalist>
-                </div>
+                    <div class="form-group">
+                        <label for="makeOrSupplier">Make or Supplier</label>
+                        <input type="text" id="makeOrSupplier" list="supplierList" placeholder="Select or type supplier">
+                        <datalist id="supplierList">
+                            <option value="Al Ghurair">
+                            <option value="Al Jalal TR Est LLC">
+                            <option value="Al Madina Building Materials trading">
+                            <option value="DSI OLD Stock">
+                            <option value="Dar Al Fonoon LLC">
+                            <option value="FAST Concrete Products Factory">
+                            <option value="Light Star Trading co">
+                            <option value="RAK Middle East Traders">
+                            <option value="Sun World Building Meterials">
+                        </datalist>
+                    </div>
 
-                <div class="form-group full-width">
-                    <label for="description">Description</label>
-                    <input type="text" id="description" placeholder="Enter material description" >
-                </div>
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" placeholder="Enter material description">
+                    </div>
 
-                <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" >
-                </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date">
+                    </div>
 
-                <div class="form-group">
-                    <label for="unit">Unit</label>
-                    <input type="text" id="unit" list="unitList" placeholder="Select or type unit" >
-                    <datalist id="unitList">
-                        <option value="Pcs">
-                        <option value="Pair">
-                        <option value="Ctn">
-                        <option value="Roll">
-                        <option value="Pkt">
-                        <option value="Set">
-                        <option value="M3">
-                        <option value="Ton">
-                        <option value="Dozen (60)">
-                        <option value="20x5">
-                    </datalist>
-                </div>
+                    <div class="form-group">
+                        <label for="unit">Unit</label>
+                        <input type="text" id="unit" list="unitList" placeholder="Select or type unit">
+                        <datalist id="unitList">
+                            <option value="Pcs">
+                            <option value="Pair">
+                            <option value="Ctn">
+                            <option value="Roll">
+                            <option value="Pkt">
+                            <option value="Set">
+                            <option value="M3">
+                            <option value="Ton">
+                            <option value="Dozen (60)">
+                            <option value="20x5">
+                        </datalist>
+                    </div>
 
-                <div class="form-group">
-                    <label for="lpo1">LPO #1</label>
-                    <input type="text" id="lpo1" placeholder="LPO #1">
-                </div>
+                    <div class="form-group">
+                        <label for="lpo1">LPO #1</label>
+                        <input type="text" id="lpo1" placeholder="LPO #1">
+                    </div>
 
-                <div class="form-group">
-                    <label for="lpo2">LPO #2</label>
-                    <input type="text" id="lpo2" placeholder="LPO #2">
-                </div>
+                    <div class="form-group">
+                        <label for="lpo2">LPO #2</label>
+                        <input type="text" id="lpo2" placeholder="LPO #2">
+                    </div>
 
-                <div class="form-group">
-                    <label for="dn1">DN #1</label>
-                    <input type="text" id="dn1" placeholder="DN #1">
-                </div>
+                    <div class="form-group">
+                        <label for="dn1">DN #1</label>
+                        <input type="text" id="dn1" placeholder="DN #1">
+                    </div>
 
-                <div class="form-group">
-                    <label for="dn2">DN #2</label>
-                    <input type="text" id="dn2" placeholder="DN #2">
-                </div>
+                    <div class="form-group">
+                        <label for="dn2">DN #2</label>
+                        <input type="text" id="dn2" placeholder="DN #2">
+                    </div>
 
-                <div class="form-group">
-                    <label for="lposQty">LPOs QTY</label>
-                    <input type="number" step="any" id="lposQty" placeholder="0">
-                </div>
+                    <div class="form-group">
+                        <label for="lposQty">LPOs QTY</label>
+                        <input type="number" step="any" id="lposQty" placeholder="0">
+                    </div>
 
-                <div class="form-group">
-                    <label for="floor">Floor / Location</label>
-                    <input type="text" id="floor" list="floorList" placeholder="Select or type location">
-                    <datalist id="floorList">
-                        <option value="Container">
-                        <option value="Out Side">
-                        <option value="Ground Floor">
-                        <option value="1st Floor">
-                        <option value="2nd Floor">
-                    </datalist>
-                </div>
+                    <div class="form-group">
+                        <label for="floor">Floor / Location</label>
+                        <input type="text" id="floor" list="floorList" placeholder="Select or type location">
+                        <datalist id="floorList">
+                            <option value="Container">
+                            <option value="Out Side">
+                            <option value="Ground Floor">
+                            <option value="1st Floor">
+                            <option value="2nd Floor">
+                        </datalist>
+                    </div>
 
-                <div class="form-group">
-                    <label for="shelfNo">Shelf No.</label>
-                    <input type="text" id="shelfNo" placeholder="Shelf No">
-                </div>
+                    <div class="form-group">
+                        <label for="shelfNo">Shelf No.</label>
+                        <input type="text" id="shelfNo" placeholder="Shelf No">
+                    </div>
 
-                <div class="form-group">
-                    <label for="rack">Rack</label>
-                    <input type="text" id="rack" placeholder="Rack">
-                </div>
+                    <div class="form-group">
+                        <label for="rack">Rack</label>
+                        <input type="text" id="rack" placeholder="Rack">
+                    </div>
 
-                <div class="form-group">
-                    <label for="inQty">IN (Qty)</label>
-                    <input type="number" step="any" id="inQty" value="0">
-                </div>
+                    <div class="form-group">
+                        <label for="inQty">IN (Qty)</label>
+                        <input type="number" step="any" id="inQty" value="0">
+                    </div>
 
-                <div class="form-group">
-                    <label for="outQty">OUT (Qty)</label>
-                    <input type="number" step="any" id="outQty" value="0">
-                </div>
+                    <div class="form-group">
+                        <label for="outQty">OUT (Qty)</label>
+                        <input type="number" step="any" id="outQty" value="0">
+                    </div>
 
-                <div class="form-group full-width">
-                    <label for="unitPrice">Unit Price</label>
-                    <input type="number" step="any" id="unitPrice" placeholder="0.00" >
-                </div>
+                    <div class="form-group full-width">
+                        <label for="unitPrice">Unit Price</label>
+                        <input type="number" step="any" id="unitPrice" placeholder="0.00">
+                    </div>
 
-                <button type="submit" id="submitBtn">Add Entry</button>
+                    <button type="submit" id="submitBtn">Add Entry</button>
+                </div>
+            </form>
+            <div id="status-message"></div>
+        </div>
+
+        <!-- TAB 2: SEARCH MATERIALS -->
+        <div id="searchTab" class="tab-content">
+            <h2>Search Materials</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" list="searchSuggestions" placeholder="Type description, material, or supplier..." oninput="filterSearchResults()">
+                <datalist id="searchSuggestions"></datalist>
             </div>
-        </form>
-        <div id="status-message"></div>
+            <div id="searchStatus" style="text-align: center; font-size: 13px; color: #777;">Loading sheet data...</div>
+            <div class="results-table-wrapper">
+                <table id="resultsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Description</th>
+                            <th>Material</th>
+                            <th>Supplier</th>
+                            <th>Stock</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzeqyb_OGzuQkf_IL1evY-S5aanyAzEbKIq90EZ_rQpx77VYqZUAwOLrka0okexngPfVg/exec"; // <-- Paste your Web App URL here
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzeqyb_OGzuQkf_IL1evY-S5aanyAzEbKIq90EZ_rQpx77VYqZUAwOLrka0okexngPfVg/exec";
+        let storeData = [];
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            if (tabId === 'addTab') {
+                document.querySelectorAll('.nav-tab')[0].classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-tab')[1].classList.add('active');
+                if (storeData.length === 0) {
+                    fetchStoreData();
+                }
+            }
+        }
+
+        // Fetch Data for Search
+        function fetchStoreData() {
+            const searchStatus = document.getElementById("searchStatus");
+            searchStatus.textContent = "Loading spreadsheet records...";
+
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(data => {
+                    storeData = data;
+                    searchStatus.textContent = "";
+                    populateSuggestions();
+                    renderTable(storeData);
+                })
+                .catch(err => {
+                    console.error("Search fetch error:", err);
+                    searchStatus.textContent = "Failed to load data. Please refresh.";
+                });
+        }
+
+        // Populate Datalist Suggestions dynamically
+        function populateSuggestions() {
+            const datalist = document.getElementById("searchSuggestions");
+            datalist.innerHTML = "";
+            const uniqueTerms = new Set();
+
+            storeData.forEach(item => {
+                if (item.description) uniqueTerms.add(item.description);
+                if (item.kindOfMaterial) uniqueTerms.add(item.kindOfMaterial);
+                if (item.supplier) uniqueTerms.add(item.supplier);
+            });
+            
+            // Add helpful smart query suggestions
+            uniqueTerms.add("out of stock");
+
+            uniqueTerms.forEach(term => {
+                const opt = document.createElement("option");
+                opt.value = term;
+                datalist.appendChild(opt);
+            });
+        }
+
+        // Filter Table Results with Case-Insensitive & "Out of Stock" Support
+        function filterSearchResults() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            
+            const filtered = storeData.filter(item => {
+                const desc = (item.description || "").toString().toLowerCase();
+                const material = (item.kindOfMaterial || "").toString().toLowerCase();
+                const supplier = (item.supplier || "").toString().toLowerCase();
+                const stockVal = parseFloat(item.stock) || 0;
+
+                // Check if user is searching specifically for out of stock items
+                if (query === "out of stock" || query === "oos") {
+                    return stockVal <= 0;
+                }
+
+                // Otherwise, standard case-insensitive match across description, material, supplier, or stock qty
+                return desc.includes(query) || 
+                       material.includes(query) || 
+                       supplier.includes(query) || 
+                       stockVal.toString().includes(query);
+            });
+
+            renderTable(filtered);
+        }
+
+        // Render Search Results into Table
+        function renderTable(items) {
+            const table = document.getElementById("resultsTable");
+            const tbody = document.getElementById("resultsBody");
+            const searchStatus = document.getElementById("searchStatus");
+            
+            tbody.innerHTML = "";
+
+            if (items.length === 0) {
+                table.style.display = "none";
+                searchStatus.textContent = "No matching items found.";
+                return;
+            }
+
+            searchStatus.textContent = "";
+            table.style.display = "table";
+
+            items.forEach(item => {
+                const stockVal = parseFloat(item.stock) || 0;
+                // Highlight stock in red if zero or negative
+                const stockDisplay = stockVal <= 0 
+                    ? `<span style="color: #e74c3c; font-weight: bold;">0 (Out of Stock)</span>` 
+                    : stockVal;
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${item.srNo || ''}</td>
+                    <td><strong>${item.description || ''}</strong></td>
+                    <td>${item.kindOfMaterial || ''}</td>
+                    <td>${item.supplier || ''}</td>
+                    <td>${stockDisplay}</td>
+                    <td>${item.unit || ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Handle Add Entry Form Submission
         const form = document.getElementById("materialForm");
         const statusMessage = document.getElementById("status-message");
 
@@ -261,6 +489,7 @@
                 form.reset();
                 btn.disabled = false;
                 btn.textContent = "Add Entry";
+                storeData = []; // Reset cache to pull fresh records on next search
                 setTimeout(() => statusMessage.textContent = "", 4000);
             })
             .catch(error => {
